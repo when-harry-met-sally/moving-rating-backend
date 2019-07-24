@@ -1,0 +1,2 @@
+INSERT INTO reviews (id, description, rating) VALUES (1, 'THIS IS A GREAT MOVIE. GREAT FOR KIDS. WOULD LIKE SOME MORE PLOT', 5);
+
