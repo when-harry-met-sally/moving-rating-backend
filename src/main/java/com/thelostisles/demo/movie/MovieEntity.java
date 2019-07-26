@@ -1,12 +1,13 @@
-package com.thelostisles.demo;
+package com.thelostisles.demo.movie;
 
 
 
 
+import com.thelostisles.demo.name.NameEntity;
+import com.thelostisles.demo.review.ReviewEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,6 +29,7 @@ public class MovieEntity {
     private boolean isFavorite;
     private int runtimeMinutes;
     private String genres;
+    private int startYear;
 
     @OneToMany
     @JoinTable (

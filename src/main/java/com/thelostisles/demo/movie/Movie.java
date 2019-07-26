@@ -1,5 +1,7 @@
-package com.thelostisles.demo;
+package com.thelostisles.demo.movie;
 
+import com.thelostisles.demo.name.Name;
+import com.thelostisles.demo.review.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,4 +23,5 @@ public class Movie {
     private String genres;
     private List<Review> reviews;
     private List<Name> names;
+    private int startYear;
 }

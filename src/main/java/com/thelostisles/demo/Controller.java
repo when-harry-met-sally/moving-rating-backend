@@ -2,7 +2,15 @@ package com.thelostisles.demo;
 
 
 
-import org.springframework.data.jpa.repository.Query;
+import com.thelostisles.demo.movie.Movie;
+import com.thelostisles.demo.movie.MovieEntity;
+import com.thelostisles.demo.movie.MovieRepository;
+import com.thelostisles.demo.name.Name;
+import com.thelostisles.demo.name.NameEntity;
+import com.thelostisles.demo.name.NameRepository;
+import com.thelostisles.demo.review.Review;
+import com.thelostisles.demo.review.ReviewEntity;
+import com.thelostisles.demo.review.ReviewRepository;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -11,12 +19,11 @@ import java.util.stream.Collectors;
 
 
 @RestController
-public class MovieController {
-
+public class Controller {
     private final MovieRepository movieRepository;
     private final NameRepository nameRepository;
     private final ReviewRepository reviewRepository;
-    public MovieController(MovieRepository movieRepository, NameRepository nameRepository, ReviewRepository reviewRepository) {
+    public Controller(MovieRepository movieRepository, NameRepository nameRepository, ReviewRepository reviewRepository) {
         this.movieRepository = movieRepository;
         this.nameRepository = nameRepository;
         this.reviewRepository = reviewRepository;
@@ -25,11 +32,38 @@ public class MovieController {
 
     @GetMapping
     @RequestMapping("movies")
-    public List<Movie> getAll() {
-        return movieRepository.findAll()
-                .stream()
-                .map(movieEntity -> toMovie(movieEntity))
-                .collect(Collectors.toList());
+    public List<Movie> getAll(@RequestParam(required = false) Integer year, @RequestParam(required = false) Integer min, @RequestParam(required = false) Integer max, @RequestParam(required = false) String name) {
+        if (year != null){
+            return movieRepository.findYear(year)
+                    .stream()
+                    .map(movieEntity -> toMovie(movieEntity))
+                    .collect(Collectors.toList());
+        } else if (min != null & max != null){
+            return movieRepository.findBetweenYears(min, max)
+                    .stream()
+                    .map(movieEntity -> toMovie(movieEntity))
+                    .collect(Collectors.toList());
+        } else if (min != null){
+            return movieRepository.findAfterYear(min)
+                    .stream()
+                    .map(movieEntity -> toMovie(movieEntity))
+                    .collect(Collectors.toList());
+        } else if (max != null){
+            return movieRepository.findBeforeYear(max)
+                    .stream()
+                    .map(movieEntity -> toMovie(movieEntity))
+                    .collect(Collectors.toList());
+        } else if (name != null){
+            return movieRepository.findByPrimaryTitleContaining(name)
+                    .stream()
+                    .map(movieEntity -> toMovie(movieEntity))
+                    .collect(Collectors.toList());
+        }
+            return movieRepository.findAll()
+                    .stream()
+                    .map(movieEntity -> toMovie(movieEntity))
+                    .collect(Collectors.toList());
+
     }
 
     @GetMapping
@@ -40,6 +74,7 @@ public class MovieController {
                 .map(movieEntity -> toMovie(movieEntity))
                 .collect(Collectors.toList());
     }
+
 
     @GetMapping
     @RequestMapping("movies/{id}")
@@ -106,6 +141,7 @@ public class MovieController {
                         .stream()
                         .map(this::toName)
                         .collect(Collectors.toList()))
+                .startYear(movieEntity.getStartYear())
                 .build();
     }
 
@@ -117,6 +153,7 @@ public class MovieController {
                 .isAdult(movie.isAdult())
                 .isFavorite(movie.isFavorite())
                 .runtimeMinutes(movie.getRuntimeMinutes())
+                .startYear(movie.getStartYear())
                 .reviews(movie
                         .getReviews()
                         .stream()

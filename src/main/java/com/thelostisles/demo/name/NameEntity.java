@@ -1,4 +1,4 @@
-package com.thelostisles.demo;
+package com.thelostisles.demo.name;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,4 +1,4 @@
-package com.thelostisles.demo;
+package com.thelostisles.demo.name;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

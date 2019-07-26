@@ -1,4 +1,4 @@
-package com.thelostisles.demo;
+package com.thelostisles.demo.review;
 
 import lombok.*;
 
